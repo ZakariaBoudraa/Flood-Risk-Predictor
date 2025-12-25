@@ -52,31 +52,12 @@ def floodCleaning(inputFile, outputFile)
     # Convert DATE/TIME column to datetime.date format
     floodDf["DATE"] = pandas.to_datetime(floodDf["DATE"]).dt.date
 
+    goodColumns = ["DATE", "CITY", "FLOOD"]
+    
     # Drop unnecessary columns
-    floodDf = floodDf.drop("ID", axis=1)
-    floodDf = floodDf.drop("DAY", axis=1)
-    floodDf = floodDf.drop("MONTH", axis=1)
-    floodDf = floodDf.drop("YEAR", axis=1)
-    floodDf = floodDf.drop("PROVINCE CODE", axis=1)
-    floodDf = floodDf.drop("PROVINCE", axis=1)
-    floodDf = floodDf.drop("DISTRICT CODE", axis=1)
-    floodDf = floodDf.drop("EVENT TYPE CODE", axis=1)
-    floodDf = floodDf.drop("EVENT NAME", axis=1)
-    floodDf = floodDf.drop("TYPES OF DISASTERS", axis=1)
-    floodDf = floodDf.drop("NUMBER OF EVENTS", axis=1)
-    floodDf = floodDf.drop("DEATHS", axis=1)
-    floodDf = floodDf.drop("LOST", axis=1)
-    floodDf = floodDf.drop("SUFFERED", axis=1)
-    floodDf = floodDf.drop("EVACUATED", axis=1)
-    floodDf = floodDf.drop("SEVERELY DMG HOUSES", axis=1)
-    floodDf = floodDf.drop("MODERATELY DMG HOUSES", axis=1)
-    floodDf = floodDf.drop("LIGHTLY DMG HOUSES", axis=1)
-    floodDf = floodDf.drop("SUBMERGED HOUSES", axis=1)
-    floodDf = floodDf.drop("DMG EDUCATIONAL UNITS", axis=1)
-    floodDf = floodDf.drop("DMG HOUSES OF WORSHIP", axis=1)
-    floodDf = floodDf.drop("DMG HEALTH CARE FACILITIES", axis=1)
-    floodDf = floodDf.drop("DMG OFFICES", axis=1)
-    floodDf = floodDf.drop("BROKEN BRIDGES", axis=1)
+    for i in floodDf.columns:
+        if i not in goodColumns:
+            floodDf = floodDf.drop(i, axis=1)
    
     floodDf.to_csv(outputFile, index=False)
 
