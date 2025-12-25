@@ -14,11 +14,11 @@ def combine(cities, output_path):
         newColumns = ["DATE", "SM_ROOTZONE", "SM_SURFACE", "PRECTOTCORR",
                       "T2M", "T2M_MAX", "T2M_MIN", "QV2M", "RH2M", "WS10M", "PS"]
         meteoCombined.columns = newColumns
-        meteoCombined["CITY"] = cities[i][0:1].capitalize() + cities[i][1:]
+        meteoCombined["CITY"] = cities[i]
 
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
 
-        for index, row in mergedDf.iterrows():
+        for row in mergedDf.iterrows():
             if (row["FLOOD"] == True):
                 row["FLOOD"] = 1
             row["FLOOD"] = 0
