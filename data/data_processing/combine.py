@@ -1,14 +1,7 @@
 import pandas
 import csv
 
-def combine(output_path):
-    cities = ["bandung",
-            "bogor",
-            "jakarta",
-            "palembang",
-            "pandeglang",
-            "semarang"]
-
+def combine(cities, output_path):
     for i in range(len(cities)):
         meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
         hydroFilepath = "../processed/hydrological_" + cities[i] + ".csv"
@@ -30,6 +23,12 @@ def combine(output_path):
 
 def main():
     combinedPath = "../processed/combined/"
-    combine(combinedPath)
+    cities = ["bandung",
+              "bogor",
+              "jakarta",
+              "palembang",
+              "pandeglang",
+              "semarang"]
+    combine(cities, combinedPath)
 
 main()
