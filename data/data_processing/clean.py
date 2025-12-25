@@ -5,6 +5,7 @@ def meteoCleaning(inputFile, outputFile):
     meteoDf = pandas.read_csv(inputFile, skiprows=16)
     # Drop all rows where the year is 2015 to align with hydrological datasets
     meteoDf = meteoDf[meteoDf["YEAR"] >= 2016]
+    meteoDf = meteoDf[~((meteoDf["YEAR"] == 2025) & (meteoDf["MO"] == 12) & (meteoDf["DY"] == 1))]
 
     meteoDf = meteoDf.drop("YEAR", axis=1)
     meteoDf = meteoDf.drop("MO", axis=1)

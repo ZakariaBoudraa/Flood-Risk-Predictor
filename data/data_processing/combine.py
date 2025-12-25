@@ -1,7 +1,7 @@
-import requests
+import pandas
 import csv
 
-def combining():
+def combine(output_path):
     cities = ["bandung",
             "bogor",
             "jakarta",
@@ -10,12 +10,21 @@ def combining():
             "semarang"]
 
     for i in range(len(cities)):
-        meteoFilepath = cities[i] + "_2015.csv"
-        hydroFilepath = "sm_daily_" + cities[i] + ".csv"
-        meteoData = csv.reader(open(meteoFilepath, "r"))
-        hydroData = csv.reader(open(hydroFilepath, "r"))
+        meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
+        hydroFilepath = "../processed/hydrological_" + cities[i] + ".csv"
+        meteoDf = pandas.read_csv(meteoFilepath)
+        hydroDf = pandas.read_csv(hydroFilepath)
 
+        combinedDf = pandas.concat([hydroDf, meteoDf], axis=1, ignore_index=True)
+
+        newColumns = ["DATE", "SM_ROOTZONE", "SM_SURFACE", "PRECTOTCORR",
+                      "T2M", "T2M_MAX", "T2M_MIN", "QV2M", "RH2M", "WS10M", "PS"]
+        combinedDf.columns = newColumns
+
+        combinedDf.to_csv(output_path + cities[i] + ".csv", index=False)
 
 def main():
-    combinedFile = "../processed/combined_file"
-    combining(combinedFile)
+    combinedPath = "../processed/combined/"
+    combine(combinedPath)
+
+main()
