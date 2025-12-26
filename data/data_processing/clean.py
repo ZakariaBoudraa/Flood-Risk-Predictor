@@ -25,13 +25,13 @@ def hydroCleaning(inputFile, outputFile):
     hydroDf.to_csv(outputFile, index=False)
 
 #Process flood data
-def floodCleaning(inputFile, outputFile)
+def floodCleaning(inputFile, outputFile):
     floodDf = pandas.read_csv(inputFile)
 
     # Translate new column names from INDONESIAN to ENGLISH
     newColumns = ["ID", "DATE", "DAY", "MONTH", "YEAR", "PROVINCE CODE", "PROVINCE",
-                   "DISTRICT CODE", "CITY","EVENT TYPE CODE" "EVENT NAME", "TYPES OF DISASTERS",
-                     "FLOOD","NUMBER OF EVENTS", "DEATHS", "LOST", "SUFFERED", "EVACUATED", 
+                   "DISTRICT CODE", "CITY", "EVENT TYPE CODE", "EVENT NAME", "TYPES OF DISASTERS",
+                     "FLOOD","NUMBER OF EVENTS", "DEATHS", "LOST", "WOUNDED", "SUFFERED", "EVACUATED",
                      "SEVERELY DMG HOUSES", "MODERATELY DMG HOUSES", "LIGHTLY DMG HOUSES", 
                      "SUBMERGED HOUSES", "DMG EDUCATIONAL UNITS", "DMG HOUSES OF WORSHIP", 
                      "DMG HEALTH CARE FACILITIES", "DMG OFFICES", "BROKEN BRIDGES"]
@@ -42,25 +42,25 @@ def floodCleaning(inputFile, outputFile)
     cities = ["Bandung","Bogor", "Jakarta", "Palembang", "Pandeglang", "Semarang"]
     
     # Filter only the cities of interest
-    for i in floodDf["CITY"] not in cities:
-        floodDf = floodDf.drop(i)
+    for index, row in floodDf.iterrows():
+        if row["CITY"] not in cities:
+            floodDf = floodDf.drop(index)
     
     # Filter only floods from  January 2016 to November 2025
     floodDf = floodDf[floodDf["YEAR"] >= 2016]
     floodDf = floodDf[~((floodDf["YEAR"] == 2025) & (floodDf["MONTH"] == 12))]
 
     # Convert DATE/TIME column to datetime.date format
-    floodDf["DATE"] = pandas.to_datetime(floodDf["DATE"]).dt.date
+    floodDf["DATE"] = pandas.to_datetime(floodDf["DATE"], format='mixed').dt.date
 
     goodColumns = ["DATE", "CITY", "FLOOD"]
-    
+
     # Drop unnecessary columns
     for i in floodDf.columns:
         if i not in goodColumns:
             floodDf = floodDf.drop(i, axis=1)
-   
-    floodDf.to_csv(outputFile, index=False)
 
+    floodDf.to_csv(outputFile, index=False)
 
 def main():
     cities = ["bandung", "bogor", "jakarta", "palembang", "pandeglang", "semarang"]
@@ -80,4 +80,5 @@ def main():
     floodInputFile = "../raw/floods/Indonesia floods 2008-2025.csv"   
     floodOutputFile = "../processed/floods/Indonesia floods 2008-2025.csv"
     floodCleaning(floodInputFile, floodOutputFile)
+
 main()

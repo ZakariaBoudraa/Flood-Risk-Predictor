@@ -5,7 +5,7 @@ def combine(cities, output_path):
     for i in range(len(cities)):
         meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
         hydroFilepath = "../processed/hydrological_" + cities[i] + ".csv"
-        floodFilepath = "../processed/flood.csv"
+        floodFilepath = "../processed/floods/Indonesia floods 2008-2025.csv"
         meteoDf = pandas.read_csv(meteoFilepath)
         hydroDf = pandas.read_csv(hydroFilepath)
         floodDf = pandas.read_csv(floodFilepath)
@@ -18,10 +18,10 @@ def combine(cities, output_path):
 
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
 
-        for row in mergedDf.iterrows():
-            if (row["FLOOD"] == True):
-                row["FLOOD"] = 1
-            row["FLOOD"] = 0
+        # for index, row in mergedDf.iterrows():
+        #     if (row["FLOOD"] == True):
+        #         mergedDf["FLOOD"] = 1
+        #     mergedDf["FLOOD"] = 0
 
         mergedDf.to_csv(output_path + cities[i] + ".csv", index=False)
 
