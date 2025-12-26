@@ -15,13 +15,15 @@ def combine(cities, output_path):
                       "T2M", "T2M_MAX", "T2M_MIN", "QV2M", "RH2M", "WS10M", "PS"]
         meteoCombined.columns = newColumns
         meteoCombined["CITY"] = cities[i]
+        meteoCombined["DATE"] = pandas.to_datetime(meteoCombined["DATE"]).dt.date
 
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
 
-        # for index, row in mergedDf.iterrows():
-        #     if (row["FLOOD"] == True):
-        #         mergedDf["FLOOD"] = 1
-        #     mergedDf["FLOOD"] = 0
+        for index, row in mergedDf.iterrows():
+            if (row["FLOOD"] == True):
+                mergedDf["FLOOD"] = 1
+            else:
+                mergedDf["FLOOD"] = 0
 
         mergedDf.to_csv(output_path + cities[i] + ".csv", index=False)
 
