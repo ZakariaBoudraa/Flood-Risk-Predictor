@@ -1,5 +1,5 @@
 import pandas
-import csv
+import numpy
 
 def combine(cities, output_path):
     for i in range(len(cities)):
@@ -14,16 +14,10 @@ def combine(cities, output_path):
         newColumns = ["DATE", "SM_ROOTZONE", "SM_SURFACE", "PRECTOTCORR",
                       "T2M", "T2M_MAX", "T2M_MIN", "QV2M", "RH2M", "WS10M", "PS"]
         meteoCombined.columns = newColumns
-        meteoCombined["CITY"] = cities[i]
-        meteoCombined["DATE"] = pandas.to_datetime(meteoCombined["DATE"]).dt.date
+        meteoCombined["CITY"] = cities[i][0:1].capitalize() + cities[i][1:]
 
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
-
-        for index, row in mergedDf.iterrows():
-            if (row["FLOOD"] == True):
-                mergedDf["FLOOD"] = 1
-            else:
-                mergedDf["FLOOD"] = 0
+        mergedDf["FLOOD"] = numpy.where(mergedDf["FLOOD"] == True, 1, 0)
 
         mergedDf.to_csv(output_path + cities[i] + ".csv", index=False)
 
