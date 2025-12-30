@@ -1,6 +1,6 @@
 import pandas
 import numpy
-import
+
 def compute(data):
     count = data["FLOOD"].value_counts(normalize=False)
     mean = data.groupby("CITY")["FLOOD"].mean()
@@ -16,6 +16,8 @@ def process(data):
 def main():
     data = pandas.read_csv("../processed/combined/master_dataset.csv")
     [count, mean, missingValues] = compute(data)
-    process(data)
+    print(count)
+    print(mean)
+    print(missingValues)
 
 main()
