@@ -1,9 +1,11 @@
 import pandas
 import numpy
+import os
 
 def combine(cities, output_path):
     for i in range(len(cities)):
-        meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
+        meteoFilepath = os.path.join("..", "processed", "meteorological_" + cities[i] + ".csv")
+        # meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
         hydroFilepath = "../processed/hydrological_" + cities[i] + ".csv"
         floodFilepath = "../processed/floods/Indonesia floods 2008-2025.csv"
         meteoDf = pandas.read_csv(meteoFilepath)

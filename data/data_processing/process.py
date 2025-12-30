@@ -1,6 +1,6 @@
 import pandas
 import numpy
-
+import
 def compute(data):
     count = data["FLOOD"].value_counts(normalize=False)
     mean = data.groupby("CITY")["FLOOD"].mean()
