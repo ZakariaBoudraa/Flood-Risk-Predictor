@@ -1,12 +1,14 @@
 import pandas
 import numpy
+import os
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 def combine(cities, output_path):
     for i in range(len(cities)):
-        dirname = Path.cwd()
-        meteoFilepath = "../processed/meteorological_" + cities[i] + ".csv"
-        hydroFilepath = "../processed/hydrological_" + cities[i] + ".csv"
-        floodFilepath = "../processed/floods/Indonesia floods 2008-2025.csv"
+        meteoFilepath = os.path.join(script_dir, "..", "processed", "meteorological_" + cities[i] + ".csv")
+        hydroFilepath = os.path.join(script_dir, "..", "processed", "hydrological_" + cities[i] + ".csv")
+        floodFilepath = os.path.join(script_dir, "..", "processed", "floods", "Indonesia floods 2008-2025.csv")
         meteoDf = pandas.read_csv(meteoFilepath)
         hydroDf = pandas.read_csv(hydroFilepath)
         floodDf = pandas.read_csv(floodFilepath)
@@ -28,17 +30,17 @@ def combine(cities, output_path):
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
         mergedDf["FLOOD"] = numpy.where(mergedDf["FLOOD"] == True, 1, 0)
 
-        mergedDf.to_csv(output_path + cities[i] + ".csv", index=False)
+        mergedDf.to_csv(os.path.join(output_path, cities[i] + ".csv"), index=False)
 
 def make_master(cities):
-    masterDf = pandas.read_csv("../processed/combined/" + cities[0] + ".csv")
+    masterDf = pandas.read_csv(os.path.join(script_dir, "..", "processed", "combined", cities[0] + ".csv"))
     for i in range(1, len(cities), 1):
-        cityDf = pandas.read_csv("../processed/combined/" + cities[i] + ".csv")
+        cityDf = pandas.read_csv(os.path.join(script_dir, "..", "processed", "combined", cities[i] + ".csv"))
         masterDf = pandas.concat([masterDf, cityDf], axis=0, ignore_index=True)
-    masterDf.to_csv("../processed/combined/master_dataset.csv", index = False)
+    masterDf.to_csv(os.path.join(script_dir, "..", "processed", "combined", "master_dataset.csv"), index = False)
 
 def main():
-    combinedPath = "../processed/combined/"
+    combinedPath = os.path.join(script_dir, "..", "processed", "combined")
     cities = ["bandung",
               "bogor",
               "jakarta",
