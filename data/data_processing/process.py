@@ -15,7 +15,7 @@ def process(data):
 
 def main():
     data = pandas.read_csv("../processed/combined/master_dataset.csv")
-    [count, mean, missinValues] = compute(data)
+    [count, mean, missingValues] = compute(data)
     process(data)
 
 main()
