@@ -39,7 +39,9 @@ def floodCleaning(inputFile, outputFile):
     floodDf.columns = newColumns
     
     # Cities of interest
-    cities = ["Bandung","Bogor", "Jakarta", "Palembang", "Pandeglang", "Semarang"]
+    cities = ["Bandung", "Bandung Barat", "Kota Bandung", "Bogor", "Kota Bogor", "Kota Adm. Jakarta Utara",
+              "Kota Adm. Jakarta Barat", "Kota Adm. Jakarta Pusat", "Kota Adm. Jakarta Selatan",
+              "Kota Adm. Jakarta Timur", "Kota Palembang", "Pandeglang", "Semarang", "Kota Semarang"]
     
     # Filter only the cities of interest
     for index, row in floodDf.iterrows():

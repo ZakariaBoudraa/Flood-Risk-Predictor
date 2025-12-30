@@ -16,10 +16,25 @@ def combine(cities, output_path):
         meteoCombined.columns = newColumns
         meteoCombined["CITY"] = cities[i][0:1].capitalize() + cities[i][1:]
 
+        floodDf["CITY"] = floodDf["CITY"].replace(["Bandung Barat", "Kota Bandung"], "Bandung")
+        floodDf["CITY"] = floodDf["CITY"].replace(["Kota Bogor"], "Bogor")
+        floodDf["CITY"] = floodDf["CITY"].replace(["Kota Adm. Jakarta Utara", "Kota Adm. Jakarta Barat",
+                                                   "Kota Adm. Jakarta Pusat", "Kota Adm. Jakarta Selatan",
+                                                   "Kota Adm. Jakarta Timur"], "Jakarta")
+        floodDf["CITY"] = floodDf["CITY"].replace(["Kota Palembang"], "Palembang")
+        floodDf["CITY"] = floodDf["CITY"].replace(["Kota Semarang"], "Semarang")
+
         mergedDf = meteoCombined.merge(floodDf, on=["DATE", "CITY"], how="left")
         mergedDf["FLOOD"] = numpy.where(mergedDf["FLOOD"] == True, 1, 0)
 
         mergedDf.to_csv(output_path + cities[i] + ".csv", index=False)
+
+def make_master(cities):
+    masterDf = pandas.read_csv("../processed/combined/" + cities[0] + ".csv")
+    for i in range(1, len(cities), 1):
+        cityDf = pandas.read_csv("../processed/combined/" + cities[i] + ".csv")
+        masterDf = pandas.concat([masterDf, cityDf], axis=0, ignore_index=True)
+    masterDf.to_csv("../processed/combined/master_dataset.csv", index = False)
 
 def main():
     combinedPath = "../processed/combined/"
@@ -30,5 +45,6 @@ def main():
               "pandeglang",
               "semarang"]
     combine(cities, combinedPath)
+    make_master(cities)
 
 main()

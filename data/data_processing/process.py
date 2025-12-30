@@ -1,13 +1,21 @@
 import pandas
 import numpy
 
-def check():
-    data = pandas.read_csv("../processed/combined/master_dataset.csv")
+def compute(data):
+    count = data["FLOOD"].value_counts(normalize=False)
+    mean = data.groupby("CITY")["FLOOD"].mean()
+    missingValues = data.isna().mean()
+    return count, mean, missingValues
+
+def process(data):
     data = data.sort_values(["CITY", "DATE"])
+    data["FLOOD TOMORROW"] = (data.groupby("CITY")["FLOOD"].shift(-1))
+    data = data.dropna(subset=["FLOOD TOMORROW"])
+    data["FLOOD TOMORROW"] = data["FLOOD TOMORROW"].astype(int)
 
-    print(data["FLOOD"].value_counts(normalize=False))
-    print(data.groupby("CITY")["FLOOD"].mean())
+def main():
+    data = pandas.read_csv("../processed/combined/master_dataset.csv")
+    [count, mean, missinValues] = compute(data)
+    process(data)
 
-    print(data.isna().mean())
-
-check()
+main()
