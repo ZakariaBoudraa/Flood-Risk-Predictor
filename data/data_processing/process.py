@@ -31,9 +31,9 @@ def create_rolling_features(data):
 
 def process(data):
     data = data.sort_values(["CITY", "DATE"])
-    data["FLOOD TOMORROW"] = (data.groupby("CITY")["FLOOD"].shift(-1))
-    data = data.dropna(subset=["FLOOD TOMORROW"])
-    data["FLOOD TOMORROW"] = data["FLOOD TOMORROW"].astype(int)
+    data["FLOOD_TOMORROW"] = (data.groupby("CITY")["FLOOD"].shift(-1))
+    data = data.dropna(subset=["FLOOD_TOMORROW"])
+    data["FLOOD_TOMORROW"] = data["FLOOD _TOMORROW"].astype(int)
 
     create_rolling_features(data)
 
