@@ -1,5 +1,4 @@
 import pandas
-import numpy
 import pickle
 from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score, f1_score
 from model import get_model
@@ -39,3 +38,13 @@ def train():
     y_prob_test = model.predict_proba(X_test)[:, 1]
     print("Test evaluation: ")
     evaluate(y_test, y_prob_test)
+
+    return model
+
+def main():
+    model = train()
+    pickleFile = open("model.pkl", "wb")
+    pickle.dump(model, pickleFile)
+
+if __name__ == "__main__":
+    main()
